@@ -2,9 +2,9 @@ version: '3.7'
 
 services:
     python:
-        image: python:3.8-slim
+        build: .
         stdin_open: true
         tty: true
-        working_dir: /src
+        command: /bin/sh -c "while sleep 1000; do :; done"
         volumes:
-            - ./src:/src
+            - ./src:/workspace
