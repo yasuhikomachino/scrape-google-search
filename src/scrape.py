@@ -1,26 +1,31 @@
 import sys
-import urllib
-
+from urllib.parse import urlencode
 import click
 import requests
 from bs4 import BeautifulSoup
 from termcolor import colored
 
 
-def scrape(query):
-    URL = "https://google.com/search?q={query}".format(query=query)
+def scrape(query, options):
+    url = "https://google.com/search?q={query}&{options}".format(
+        query=query,
+        options=options
+    )
 
-    USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
+    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
 
-    headers = {"user-agent": USER_AGENT}
-    resp = requests.get(URL, headers=headers)
+    headers = {"user-agent": user_agent}
+    resp = requests.get(url, headers=headers)
 
     if resp.status_code != 200:
         print(colored("There's something wrong with google.", "red"))
         sys.exit(1)
 
     soup = BeautifulSoup(resp.content, "html.parser")
-    results = ""
+
+    results = colored("URL: {url}".format(url=url), "magenta")
+    results += "\n\n"
+
     for g in soup.find_all(class_='rc'):
         anchors = g.find_all('a')
         if anchors:
@@ -36,15 +41,28 @@ def scrape(query):
 
 @click.command()
 @click.argument('query', nargs=-1)
-def command(query):
+@click.option('--gl', default="us")
+@click.option('--hl', default="en")
+@click.option('--num', default=10)
+@click.option('--page', default=1)
+def command(query, gl, hl, num, page):
     if len(query) == 0:
         print(colored("Please specify the search keyword as an argument.", "red"))
         sys.exit(1)
 
-    scrape("+".join(query))
+    options = {
+        "gl": gl,
+        "hl": hl,
+        "num": num,
+        "start": num * (page-1)
+    }
+
+    scrape("+".join(query), urlencode(options))
+
 
 def main():
     command()
+
 
 if __name__ == '__main__':
     main()
