@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+    python:
+        image: python:3.8-slim
+        stdin_open: true
+        tty: true
+        working_dir: /src
+        volumes:
+            - ./src:/src
