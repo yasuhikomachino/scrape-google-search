@@ -22,7 +22,7 @@ $ docker-compose up -d
 ## Run script
 
 ```
-$ docker-compose exec docker-compose exec python python scrape.py {SOME KEYWORD}
+$ docker-compose exec python python scrape.py {SOME KEYWORD}
 ```
 
 or run script in the docker container.
