@@ -1,7 +1,7 @@
-FROM python:3.8
+FROM python:3.9.0
 
 WORKDIR /workspace
 
-ADD ./src/requirements.txt /workspace/
+COPY src/requirements.txt .
 
 RUN pip install -r requirements.txt
