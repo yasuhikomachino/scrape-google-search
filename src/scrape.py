@@ -7,31 +7,31 @@ from bs4 import BeautifulSoup
 from termcolor import colored
 
 
-def scrape(query, options):
+def scrape(query: str, options: str):
     url = "https://google.com/search?q={query}&{options}".format(
         query=query,
         options=options,
     )
 
-    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
+    user_agent: str = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
 
-    headers = {"user-agent": user_agent}
-    resp = requests.get(url, headers=headers)
+    headers: dict = {"user-agent": user_agent}
+    response: requests.Response = requests.get(url, headers=headers)
 
-    if resp.status_code != 200:
+    if response.status_code != 200:
         print(colored("There's something wrong with google.", "red"))
         sys.exit(1)
 
-    soup = BeautifulSoup(resp.content, "html.parser")
+    soup: BeautifulSoup = BeautifulSoup(response.content, "html.parser")
 
-    results = colored("URL: {url}".format(url=url), "magenta")
+    results: str = colored("URL: {url}".format(url=url), "magenta")
     results += "\n\n"
 
     for g in soup.find_all(class_="rc"):
-        anchors = g.find_all("a")
+        anchors: list = g.find_all("a")
         if anchors:
-            link = anchors[0]["href"]
-            title = g.find("h3").text
+            link: str = anchors[0]["href"]
+            title: str = g.find("h3").text
             results += colored(title, "green")
             results += "\n"
             results += colored(link, "blue")
@@ -46,12 +46,12 @@ def scrape(query, options):
 @click.option("--hl", default="en")
 @click.option("--num", default=10)
 @click.option("--page", default=1)
-def command(query, gl, hl, num, page):
+def command(query, gl: str, hl: str, num: int, page: int):
     if len(query) == 0:
         print(colored("Please specify the search keyword as an argument.", "red"))
         sys.exit(1)
 
-    options = {
+    options: dict = {
         "gl": gl,
         "hl": hl,
         "num": num,
