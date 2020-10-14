@@ -4,13 +4,15 @@ Scraping Google search results in Python3.
 
 ## Environment
 
-- Docker version 19.03.12, build 48a66213fe
-- docker-compose version 1.26.2, build eefe0d31
+- Docker 19.03.12
+- docker-compose 1.26.2
 
 ## Stack
 
 - Python 3.8.6
-
+- mypy 0.79
+- flake8 3.8.4
+- black 20.8b1
 
 ## Setup
 
@@ -44,6 +46,6 @@ $ docker-compose exec python bash
 |name|description|default|
 |:--|:--|:--|
 |gl|country code|us|
-|hl|launguage code|en|
+|hl|language code|en|
 |page|page|1|
 |num|number of results per page|10|
